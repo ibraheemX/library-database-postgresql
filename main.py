@@ -15,6 +15,12 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def has_book_copies(conn):
+    with conn.cursor() as cur:
+        cur.execute("SELECT COUNT(*) FROM book_copies")
+        return cur.fetchone()[0] > 0
+
+
 def main():
     conn = None
     try:
@@ -27,9 +33,13 @@ def main():
             category_ids = insert_categories(conn)
             books_ids = insert_books(conn, category_ids)
             insert_book_authors(conn, author_ids, books_ids)
-            copy_ids = insert_book_copies(conn, books_ids)
             member_ids = insert_members(conn)
-            insert_borrowings(conn, copy_ids, member_ids)
+
+            if has_book_copies(conn):
+                logger.info("Book copies and borrowings already seeded, skipping.")
+            else:
+                copy_ids = insert_book_copies(conn, books_ids)
+                insert_borrowings(conn, copy_ids, member_ids)
 
         logger.info("all data inserted and committed successfully")
 
@@ -38,7 +48,7 @@ def main():
 
     finally:
         if conn:
-            conn.close() 
+            conn.close()
             logger.info(" database connection closed")
 
 

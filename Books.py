@@ -15,6 +15,9 @@ def insert_books(conn, category_ids):
                 cur.execute('''
                     INSERT INTO books (title, published_date, category_id)
                     VALUES (%s, %s, %s)
+                    ON CONFLICT (title) DO UPDATE
+                        SET published_date = EXCLUDED.published_date,
+                            category_id = EXCLUDED.category_id
                     RETURNING book_id
                 ''', (title, published_date, category_id))
 
@@ -40,6 +43,7 @@ def insert_book_authors(conn, author_ids, books_ids):
                 cur.execute('''
                     INSERT INTO book_authors(author_id, book_id)
                     VALUES (%s, %s)
+                    ON CONFLICT (book_id, author_id) DO NOTHING
                 ''', (author_id, book_id))
 
                 logger.info(f"{author_name}: {book_name}")

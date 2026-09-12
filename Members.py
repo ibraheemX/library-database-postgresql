@@ -13,6 +13,8 @@ def insert_members(conn):
                 cur.execute('''
                     INSERT INTO members (name, email)
                     VALUES (%s, %s)
+                    ON CONFLICT (email) DO UPDATE
+                        SET name = EXCLUDED.name
                     RETURNING member_id
                 ''', (name, email))
 

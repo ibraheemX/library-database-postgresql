@@ -10,7 +10,7 @@ def create_all_tables(conn):
             cur.execute('''
                 CREATE TABLE IF NOT EXISTS authors(
                     author_id SERIAL PRIMARY KEY,
-                    name VARCHAR(100) NOT NULL,
+                    name VARCHAR(100) NOT NULL UNIQUE,
                     bio TEXT NOT NULL
                 );
             ''')
@@ -19,7 +19,7 @@ def create_all_tables(conn):
             cur.execute('''
                 CREATE TABLE IF NOT EXISTS categories(
                     category_id SERIAL PRIMARY KEY,
-                    name VARCHAR(255) NOT NULL
+                    name VARCHAR(255) NOT NULL UNIQUE
                 );
             ''')
 
@@ -27,7 +27,7 @@ def create_all_tables(conn):
             cur.execute('''
                 CREATE TABLE IF NOT EXISTS books(
                     book_id SERIAL PRIMARY KEY,
-                    title VARCHAR(255) NOT NULL,
+                    title VARCHAR(255) NOT NULL UNIQUE,
                     published_date DATE NOT NULL,
                     category_id INTEGER REFERENCES categories(category_id)
                 );

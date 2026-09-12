@@ -12,6 +12,8 @@ def insert_categories(conn):
                 cur.execute('''
                     INSERT INTO categories (name)
                     VALUES (%s)
+                    ON CONFLICT (name) DO UPDATE
+                        SET name = EXCLUDED.name
                     RETURNING category_id
                 ''', (name,))
 

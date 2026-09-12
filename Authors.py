@@ -13,6 +13,8 @@ def insert_authors(conn):
                 cur.execute('''
                     INSERT INTO authors(name, bio)
                     VALUES (%s, %s)
+                    ON CONFLICT (name) DO UPDATE
+                        SET bio = EXCLUDED.bio
                     RETURNING author_id
                 ''', (name, bio))
 
