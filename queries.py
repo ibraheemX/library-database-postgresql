@@ -119,7 +119,7 @@ def print_query_results(title, rows):
 
     print(f"\n--- {title} ---")
     if not rows:
-        print("(لا توجد نتائج)")
+        print("( no results )")
         return
     for row in rows:
         print(row)

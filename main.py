@@ -39,7 +39,7 @@ def main():
     finally:
         if conn:
             conn.close() 
-            logger.info("يatabase connection closed")
+            logger.info(" database connection closed")
 
 
 if __name__ == '__main__':
